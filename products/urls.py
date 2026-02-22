@@ -15,7 +15,7 @@ MVC Role: ROUTER
 """
 
 from django.urls import path
-from .views import ProductIndexView, ProductShowView, ProductCreateView
+from .views import ProductIndexView, ProductShowView, ProductCreateView, ProductListView
 
 app_name = 'products'  # URL namespace
 
@@ -25,6 +25,9 @@ urlpatterns = [
 
     # /products/create/  ← must come BEFORE <id>
     path('create/', ProductCreateView.as_view(), name='create'),
+
+    # Bonus: /products/list/  ← usando el ListView genérico
+    path('list/', ProductListView.as_view(), name='list'),
 
     # /products/<id>/  e.g. /products/3/
     path('<int:id>/', ProductShowView.as_view(), name='show'),

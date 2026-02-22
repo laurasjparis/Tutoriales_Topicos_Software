@@ -11,29 +11,28 @@
         <!-- Product Detail Card -->
         <div class="product-detail-card card shadow mb-4">
 
-            <!-- Emoji header -->
+            <!-- Header simplificado -->
             <div class="product-detail-card__header text-center py-5 fs-1">
-                {{ product.emoji }}
+                📦
             </div>
 
             <div class="card-body p-4">
 
-                <!-- Category badge -->
-                <span class="badge badge-category mb-3">{{ product.category }}</span>
+                <span class="badge badge-category mb-3">
+                    Última Modificación: {{ product.updated_at|date:"Y-m-d H:i" }}
+                </span>
 
-                <!-- Product name -->
                 <h2 class="product-detail-card__name mb-2">{{ product.name }}</h2>
 
-                <!-- Price -->
-                <p class="product-detail-card__price mb-4">${{ product.price }}</p>
-
-                <!-- Description (conditional rendering, Step 8) -->
                 {% if product.description %}
-                <p class="product-detail-card__description text-muted">
-                    {{ product.description }}
-                </p>
+                <p class="text-muted fst-italic mb-3">{{ product.description }}</p>
+                {% endif %}
+
+                <!-- Condicional de Precio > 2000 (Paso 5) -->
+                {% if product.price > 2000 %}
+                <p class="product-detail-card__price mb-4 text-danger">⚠️ ${{ product.price }}</p>
                 {% else %}
-                <p class="text-muted fst-italic">No description available.</p>
+                <p class="product-detail-card__price mb-4">${{ product.price }}</p>
                 {% endif %}
 
                 <hr />
@@ -41,24 +40,51 @@
                 <!-- Actions -->
                 <div class="d-flex gap-2 flex-wrap">
                     <a href="{% url 'products:index' %}" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left me-1"></i> Back to Products
+                        <i class="bi bi-arrow-left me-1"></i> Volver a Productos
                     </a>
                     <a href="{% url 'products:create' %}" class="btn btn-primary">
-                        <i class="bi bi-plus-circle me-1"></i> Add New Product
+                        <i class="bi bi-plus-circle me-1"></i> Añadir Nuevo
                     </a>
                 </div>
 
             </div>
         </div>
 
+
+        <!-- Sección de Comentarios (RELACIÓN ONE-TO-MANY) (Paso 7) -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-light fw-bold text-muted">
+                <i class="bi bi-chat-left-text me-2"></i>
+                Comentarios Relacionados (product.comments.all)
+            </div>
+            <ul class="list-group list-group-flush">
+
+                <!-- Bucle For a través de la relación inversa del ORM (ForeignKey) -->
+                {% for comment in product.comments.all %}
+                <li class="list-group-item py-3">
+                    <small class="text-muted d-block mb-1">
+                        Publicado el: {{ comment.created_at|date:"SHORT_DATE_FORMAT" }}
+                    </small>
+                    {{ comment.description }}
+                </li>
+                {% empty %}
+                <li class="list-group-item text-muted fst-italic py-3">
+                    Nadie ha comentado en este producto todavía.
+                </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+
+
         <!-- Metadata box -->
         <div class="card card-body bg-light text-muted small">
             <div class="row">
                 <div class="col-6">
-                    <strong>Product ID:</strong> #{{ product.id }}
+                    <strong>ID en BBDD:</strong> #{{ product.id }}
                 </div>
                 <div class="col-6">
-                    <strong>Category:</strong> {{ product.category }}
+                    <strong>Tabla SQL:</strong> products_product
                 </div>
             </div>
         </div>

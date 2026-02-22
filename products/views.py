@@ -1,129 +1,116 @@
 """
 products/views.py
 =================
-VIEWS FOR THE PRODUCTS MODULE
+VIEWS CON ORM DE DJANGO
 ─────────────────────────────────────────────────────────────────
 MVC Role: CONTROLLER
-  - Views receive HTTP requests, consult the Model, build context,
-    and delegate rendering to the Template layer.
-
-Views defined here:
-  ProductIndexView  — Lists all products          GET /products/
-  ProductShowView   — Shows one product detail    GET /products/<id>/
-  ProductCreateView — Shows and handles the form  GET|POST /products/create/
+  - Utilizamos Product.objects.all() en lugar de memoria estática.
+  - Añadimos validación con get_object_or_404.
+  - Demostramos el uso de ListView.
 ─────────────────────────────────────────────────────────────────
 """
 
-from django.views.generic import TemplateView, View
-from django.shortcuts import render, redirect
-
-from .models import get_all_products, get_product_by_id
+from django.views.generic import TemplateView, View, ListView
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Product
 from .forms import ProductForm
 
 
-# ── 1.  Product Index ────────────────────────────────────────────
+# ── 1A.  Product Index Original (TemplateView + ORM manual) ──────
 
 class ProductIndexView(TemplateView):
     """
-    LIST VIEW — shows all products.
-    Uses TemplateView because it's a simple read-only page.
-
-    URL:      /products/
-    Template: templates/products/index.html
+    Lista todos los productos utilizando Product.objects.all().
     """
     template_name = 'products/index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Our Products'
-        context['header_title'] = 'Product Catalogue'
-        # ── Call Model layer to retrieve data ──────────────────
-        context['products'] = get_all_products()
+        context['title'] = 'Nuestros Productos'
+        context['header_title'] = 'Catálogo ORM'
+        
+        # OBTENER TODOS LOS REGISTROS DESDE SQL (SELECT * FROM products_product)
+        context['products'] = Product.objects.all()
         return context
 
 
-# ── 2.  Product Show (Detail) ────────────────────────────────────
+# ── 1B.  Product List View (Bonus: Usando ListView) ──────────────
+
+class ProductListView(ListView):
+    """
+    Lista utilizando generic.ListView
+    Django inyecta automáticamente 'object_list' o context_object_name.
+    """
+    model = Product
+    template_name = 'products/index.html'
+    context_object_name = 'products' # Igual que arriba
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Listado Generic ListView'
+        context['header_title'] = 'Catálogo ListView'
+        return context
+
+
+# ── 2.   Product Show (Detail View + 404/Redirección) ────────────
 
 class ProductShowView(TemplateView):
-    """
-    DETAIL VIEW — shows a single product identified by <id>.
-
-    URL:      /products/<id>/
-    Template: templates/products/show.html
-    Redirect: If the id doesn't match any product → redirect to home.
-    """
     template_name = 'products/show.html'
 
     def get(self, request, *args, **kwargs):
         product_id = kwargs.get('id')
 
-        # ── Query Model layer ──────────────────────────────────
-        product = get_product_by_id(product_id)
-
-        if product is None:
-            # Feature 8: invalid id → redirect to home
+        # Buscar en BD o disparar except -> redireccionar
+        try:
+            # Busca 'id' exacto o falla
+            product = get_object_or_404(Product, id=product_id)
+        except Exception:
+            # Feature: redirect to home if invalid
             return redirect('pages:home')
 
         return render(request, self.template_name, {
             'title': product.name,
-            'header_title': 'Product Detail',
+            'header_title': 'Detalles',
             'product': product,
         })
 
 
-# ── 3.  Product Create (Form) ────────────────────────────────────
+# ── 3.   Product Create (ModelForm Save) ─────────────────────────
 
 class ProductCreateView(View):
     """
-    CREATE VIEW — renders the form (GET) and processes it (POST).
-
-    Uses the base View class to show explicit GET / POST handling,
-    which mirrors the MVC / HTTP verb pattern taught in class.
-
-    URL:      /products/create/
-    Template: templates/products/create.html
+    CREATE VIEW (ModelForm)
+    A diferencia de form.Form, ModelForm.save() guarda en SQL de inmediato.
     """
     template_name = 'products/create.html'
 
-    # ── GET: Render empty form ─────────────────────────────────
     def get(self, request):
-        form = ProductForm()
         return render(request, self.template_name, {
-            'title': 'Add Product',
-            'header_title': 'New Product',
-            'form': form,
+            'title': 'Crear Producto',
+            'header_title': 'Nuevo Modelo',
+            'form': ProductForm(),
         })
 
-    # ── POST: Validate and process form data ───────────────────
     def post(self, request):
         form = ProductForm(request.POST)
 
         if form.is_valid():
-            # In a real project you'd save to the database here.
-            # For the tutorial we simply read the cleaned values.
-            name = form.cleaned_data['name']
-            price = form.cleaned_data['price']
-            category = form.cleaned_data['category']
-            description = form.cleaned_data.get('description', '')
-
-            # Pass success message and submitted data to template
+            # INSERTA EN DB: INSERT INTO products_product ... 
+            product = form.save()
             return render(request, self.template_name, {
-                'title': 'Add Product',
-                'header_title': 'New Product',
-                'form': ProductForm(),        # fresh empty form
+                'title': 'Crear Producto',
+                'header_title': 'Nuevo Modelo',
+                'form': ProductForm(),
                 'success': True,
                 'submitted': {
-                    'name': name,
-                    'price': price,
-                    'category': category,
-                    'description': description,
+                    'name': product.name,
+                    'price': product.price,
                 },
             })
 
-        # Form is INVALID → re-render with error messages
         return render(request, self.template_name, {
-            'title': 'Add Product',
-            'header_title': 'New Product',
-            'form': form,                     # form carries errors
+            'title': 'Crear Producto',
+            'header_title': 'Nuevo Modelo',
+            'form': form,
             'success': False,
         })

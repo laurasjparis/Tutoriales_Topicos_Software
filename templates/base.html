@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,28 +14,21 @@
   <title>{% block title %}Online Store{% endblock %} | Django MVC</title>
 
   <!-- Bootstrap 5 CSS (CDN) -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
   <!-- Bootstrap Icons -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-    rel="stylesheet"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
 
   <!-- Google Font: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
 
   <!-- Our custom CSS (Step 5 — Static Files) -->
   <link rel="stylesheet" href="{% static 'pages/app.css' %}" />
 </head>
+
 <body>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -46,20 +40,12 @@
 
       <!-- Brand Logo -->
       <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'pages:home' %}">
-        <span class="brand-icon">🛒</span>
-        <span class="brand-text">Django<span class="brand-accent">Store</span></span>
+        <span class="brand-text">Online store</span>
       </a>
 
       <!-- Hamburger Toggle (mobile) -->
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#mainNav"
-        aria-controls="mainNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -68,29 +54,27 @@
         <ul class="navbar-nav ms-auto gap-1">
 
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/' %}active{% endif %}"
-               href="{% url 'pages:home' %}">
+            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'pages:home' %}">
               <i class="bi bi-house-door me-1"></i> Home
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link {% if '/about' in request.path %}active{% endif %}"
-               href="{% url 'pages:about' %}">
+            <a class="nav-link {% if '/about' in request.path %}active{% endif %}" href="{% url 'pages:about' %}">
               <i class="bi bi-info-circle me-1"></i> About
             </a>
           </li>
 
           <li class="nav-item">
             <a class="nav-link {% if '/products' in request.path and '/create' not in request.path %}active{% endif %}"
-               href="{% url 'products:index' %}">
+              href="{% url 'products:index' %}">
               <i class="bi bi-grid me-1"></i> Products
             </a>
           </li>
 
           <li class="nav-item">
             <a class="nav-link nav-cta {% if '/create' in request.path %}active{% endif %}"
-               href="{% url 'products:create' %}">
+              href="{% url 'products:create' %}">
               <i class="bi bi-plus-circle me-1"></i> Add Product
             </a>
           </li>
@@ -128,8 +112,7 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col-md-6 text-center text-md-start mb-2 mb-md-0">
-          <span class="footer-brand">🛒 Django<strong>Store</strong></span>
-          <span class="footer-sub">— A Django MVC Tutorial Project</span>
+          <span class="footer-brand">Copyright Laura Jiménez</span>
         </div>
         <div class="col-md-6 text-center text-md-end">
           <small class="text-muted">
@@ -145,4 +128,5 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

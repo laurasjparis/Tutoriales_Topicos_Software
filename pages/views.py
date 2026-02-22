@@ -26,7 +26,7 @@ class HomePageView(TemplateView):
         context = super().get_context_data(**kwargs)
         # Inject custom data into the template context
         context['title'] = 'Welcome to the Online Store'
-        context['header_title'] = 'Your Favourite Online Store'
+        context['header_title'] = 'A django EAFIT app'
         context['tagline'] = 'Quality products delivered to your door.'
         return context
 
