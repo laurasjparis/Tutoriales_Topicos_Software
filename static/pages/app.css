@@ -1,0 +1,395 @@
+/*
+ * static/pages/app.css
+ * =====================
+ * Custom styles for the Django MVC Tutorial — Online Store
+ * Supplements Bootstrap 5 with a cohesive design system.
+ * ─────────────────────────────────────────────────────────
+ */
+
+/* ══════════════════════════════════════════════════════════
+   DESIGN TOKENS (CSS Custom Properties)
+══════════════════════════════════════════════════════════ */
+:root {
+  --color-brand-primary: #f48fb1;
+  /* Rosa pastel principal */
+  --color-brand-secondary: #f06292;
+  /* Rosa pastel más intenso */
+  --color-brand-accent: #ffd54f;
+  /* Amarillo cálido      */
+  --color-bg-body: #fff5f7;
+  --color-bg-card: #ffffff;
+  --color-text-muted: #9e7b8a;
+  --color-border: #fce4ec;
+
+  --gradient-brand: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-secondary));
+  --gradient-hero: linear-gradient(160deg, #fff0f4 0%, #fce4ec 100%);
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, .10);
+  --shadow-lg: 0 10px 30px rgba(244, 143, 177, .30);
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ══════════════════════════════════════════════════════════
+   BASE
+══════════════════════════════════════════════════════════ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-bg-body);
+  color: #1f2937;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main.main-content {
+  flex: 1;
+}
+
+a {
+  color: #e91e8c;
+}
+
+a:hover {
+  color: var(--color-brand-secondary);
+}
+
+/* ══════════════════════════════════════════════════════════
+   NAVBAR
+══════════════════════════════════════════════════════════ */
+.navbar-store {
+  background: linear-gradient(90deg, #880e4f 0%, #c2185b 100%);
+  padding: 0.75rem 0;
+  box-shadow: 0 2px 12px rgba(136, 14, 79, .35);
+}
+
+/* Brand */
+.brand-icon {
+  font-size: 1.4rem;
+}
+
+.brand-text {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+.brand-accent {
+  color: var(--color-brand-accent);
+}
+
+/* Nav links */
+.navbar-store .nav-link {
+  color: rgba(255, 255, 255, .75);
+  font-weight: 500;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  transition: background .18s ease, color .18s ease;
+}
+
+.navbar-store .nav-link:hover,
+.navbar-store .nav-link.active {
+  background: rgba(255, 255, 255, .12);
+  color: #ffffff;
+}
+
+/* CTA nav button */
+.navbar-store .nav-cta {
+  background: var(--color-brand-accent);
+  color: #880e4f !important;
+  font-weight: 600;
+}
+
+.navbar-store .nav-cta:hover {
+  background: #ffe082;
+  color: #880e4f !important;
+}
+
+/* Toggler icon (makes it white on dark) */
+.navbar-toggler-icon {
+  filter: invert(1);
+}
+
+.navbar-toggler {
+  border-color: rgba(255, 255, 255, .25);
+}
+
+/* ══════════════════════════════════════════════════════════
+   PAGE HEADER
+══════════════════════════════════════════════════════════ */
+.page-header {
+  background: var(--gradient-hero);
+  border-bottom: 1px solid var(--color-border);
+  padding: 2.5rem 0 2rem;
+}
+
+.page-header__title {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #f48fb1, #e91e8c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+/* ══════════════════════════════════════════════════════════
+   HOME — HERO
+══════════════════════════════════════════════════════════ */
+.hero-section {
+  padding: 2rem 0;
+}
+
+.hero-tagline {
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+}
+
+.btn-hero-primary {
+  background: linear-gradient(135deg, #f48fb1, #e91e8c);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 14px rgba(244, 143, 177, .45);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.btn-hero-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 30, 140, .45);
+  color: #fff;
+}
+
+.btn-hero-secondary {
+  background: transparent;
+  border: 2px solid #f48fb1;
+  color: #c2185b;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition: background .18s ease, color .18s ease;
+}
+
+.btn-hero-secondary:hover {
+  background: linear-gradient(135deg, #f48fb1, #e91e8c);
+  color: #fff;
+  border-color: transparent;
+}
+
+/* ══════════════════════════════════════════════════════════
+   FEATURE CARDS (Home page)
+══════════════════════════════════════════════════════════ */
+.section-title {
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 1.4rem;
+}
+
+.feature-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+}
+
+/* ══════════════════════════════════════════════════════════
+   MVC INFO BOX (tutorial note)
+══════════════════════════════════════════════════════════ */
+.mvc-info-box {
+  background: linear-gradient(135deg, #fce4ec, #fff0f4);
+  border: 1px solid #f8bbd0;
+  font-size: 0.875rem;
+  color: #880e4f;
+}
+
+.mvc-info-box code {
+  background: rgba(244, 143, 177, .20);
+  color: #c2185b;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   PRODUCT CARDS (Index page)
+══════════════════════════════════════════════════════════ */
+.product-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(244, 143, 177, .35);
+}
+
+.product-card__thumb {
+  background: var(--gradient-hero);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.product-price {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #c2185b;
+}
+
+.badge-category {
+  background: linear-gradient(135deg, #fce4ec, #ffd6e5);
+  color: #ad1457;
+  font-weight: 600;
+  font-size: 0.7rem;
+  padding: 0.3em 0.7em;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   PRODUCT DETAIL CARD (Show page)
+══════════════════════════════════════════════════════════ */
+.product-detail-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.product-detail-card__header {
+  background: var(--gradient-hero);
+  border-bottom: 1px solid var(--color-border);
+  font-size: 4rem;
+}
+
+.product-detail-card__name {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.product-detail-card__price {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #c2185b;
+}
+
+.product-detail-card__description {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* ══════════════════════════════════════════════════════════
+   ABOUT PAGE
+══════════════════════════════════════════════════════════ */
+.about-card {
+  border: none;
+  border-radius: var(--radius-lg);
+}
+
+.about-subtitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.about-description {
+  color: #374151;
+  line-height: 1.75;
+}
+
+.stat-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #c2185b;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+}
+
+/* ══════════════════════════════════════════════════════════
+   FORM (Create page)
+══════════════════════════════════════════════════════════ */
+.card-header.bg-primary {
+  background: var(--gradient-brand) !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #f48fb1;
+  box-shadow: 0 0 0 3px rgba(244, 143, 177, .30);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #f48fb1, #e91e8c);
+  border: none;
+  font-weight: 600;
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.btn-primary:hover {
+  opacity: .9;
+  transform: translateY(-1px);
+}
+
+/* ══════════════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════════════ */
+.site-footer {
+  background: #880e4f;
+  color: rgba(255, 255, 255, .75);
+  padding: 1.25rem 0;
+  margin-top: auto;
+  font-size: 0.875rem;
+}
+
+.footer-brand {
+  color: #fff;
+  font-weight: 600;
+}
+
+.footer-sub {
+  color: rgba(255, 255, 255, .5);
+}
+
+/* ══════════════════════════════════════════════════════════
+   EMPTY STATE
+══════════════════════════════════════════════════════════ */
+.empty-state {
+  color: var(--color-text-muted);
+}
+
+/* ══════════════════════════════════════════════════════════
+   UTILITY HELPERS
+══════════════════════════════════════════════════════════ */
+hr {
+  border-color: var(--color-border);
+}

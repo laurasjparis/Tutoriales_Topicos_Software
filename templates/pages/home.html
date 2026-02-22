@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{# ─── Title Block ────────────────────────────────────────────── #}
+{% block title %}{{ title }}{% endblock %}
+
+{# ─── Header Block ───────────────────────────────────────────── #}
+{% block header_title %}{{ header_title }}{% endblock %}
+
+{# ─── Content Block ──────────────────────────────────────────── #}
+{% block content %}
+
+<!-- Hero section -->
+<section class="hero-section text-center py-5">
+    <p class="hero-tagline lead mb-4">{{ tagline }}</p>
+
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="{% url 'products:index' %}" class="btn btn-hero-primary btn-lg px-4">
+            <i class="bi bi-grid me-2"></i>Browse Products
+        </a>
+        <a href="{% url 'products:create' %}" class="btn btn-hero-secondary btn-lg px-4">
+            <i class="bi bi-plus-circle me-2"></i>Add a Product
+        </a>
+    </div>
+</section>
+
+<hr class="my-5" />
+
+<!-- Feature cards row -->
+<section class="mb-5">
+    <h2 class="section-title text-center mb-4">Why Shop With Us?</h2>
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="feature-card card h-100 text-center p-4">
+                <div class="feature-icon mb-3">🚀</div>
+                <h5 class="card-title">Fast Delivery</h5>
+                <p class="card-text text-muted">
+                    Orders shipped within 24 hours. Free delivery on orders over $50.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-card card h-100 text-center p-4">
+                <div class="feature-icon mb-3">🔒</div>
+                <h5 class="card-title">Secure Payments</h5>
+                <p class="card-text text-muted">
+                    TLS-encrypted checkout. We never store your card details.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-card card h-100 text-center p-4">
+                <div class="feature-icon mb-3">🌟</div>
+                <h5 class="card-title">Quality Guarantee</h5>
+                <p class="card-text text-muted">
+                    30-day return policy, no questions asked.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- MVC Concept Box (tutorial note) -->
+<section class="mvc-info-box p-4 rounded mb-4">
+    <h5 class="mb-2"><i class="bi bi-mortarboard-fill me-2"></i>Tutorial Note — MVC Concept</h5>
+    <p class="mb-1">
+        <strong>Model</strong> — <code>products/models.py</code> holds the data and business logic.
+    </p>
+    <p class="mb-1">
+        <strong>View (Template)</strong> — this file (<code>templates/pages/home.html</code>) renders the UI.
+    </p>
+    <p class="mb-0">
+        <strong>Controller (View)</strong> — <code>pages/views.py → HomePageView</code> receives the request,
+        fetches context data, and selects this template.
+    </p>
+</section>
+
+{% endblock %}

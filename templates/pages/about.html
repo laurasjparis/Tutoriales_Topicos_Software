@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block header_title %}{{ header_title }}{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+
+        <!-- About Card -->
+        <div class="about-card card shadow-sm mb-4">
+            <div class="card-body p-5">
+
+                <!-- Subtitle (dynamic from context) -->
+                {% if subtitle %}
+                <h2 class="about-subtitle mb-3">
+                    <i class="bi bi-bookmark-star me-2 text-primary"></i>{{ subtitle }}
+                </h2>
+                {% endif %}
+
+                <!-- Description (dynamic from context) -->
+                {% if description %}
+                <p class="about-description lead">{{ description }}</p>
+                {% endif %}
+
+                <hr />
+
+                <!-- Author (dynamic from context, Step 3 requirement) -->
+                {% if author %}
+                <p class="mb-0">
+                    <i class="bi bi-person-circle me-2"></i>
+                    <strong>Created by:</strong> {{ author }}
+                </p>
+                {% endif %}
+
+            </div>
+        </div>
+
+        <!-- Team Stats Row -->
+        <div class="row g-3 mb-4">
+            <div class="col-sm-4">
+                <div class="stat-card card text-center p-3">
+                    <div class="stat-number">6+</div>
+                    <div class="stat-label">Products</div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="stat-card card text-center p-3">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Categories</div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="stat-card card text-center p-3">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Django</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Home link -->
+        <div class="text-center">
+            <a href="{% url 'pages:home' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Back to Home
+            </a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
