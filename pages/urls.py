@@ -10,7 +10,7 @@ MVC Role: ROUTER (part of Controller layer)
 """
 
 from django.urls import path
-from .views import HomePageView, AboutPageView
+from .views import HomePageView, AboutPageView, CartView, CartRemoveAllView
 
 app_name = 'pages'  # URL namespace
 
@@ -20,4 +20,7 @@ urlpatterns = [
 
     # Route: /about/  →  AboutPageView
     path('about/', AboutPageView.as_view(), name='about'),
+    path('cart/', CartView.as_view(), name='cart_index'),
+    path('cart/add/<str:product_id>', CartView.as_view(), name='cart_add'),
+    path('cart/removeAll', CartRemoveAllView.as_view(), name='cart_removeAll'),
 ]
