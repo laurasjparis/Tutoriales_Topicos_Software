@@ -27,7 +27,7 @@ class ProductIndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Nuestros Productos'
-        context['header_title'] = 'Catálogo ORM'
+        context['header_title'] = 'Products Catalog'
         
         # OBTENER TODOS LOS REGISTROS DESDE SQL (SELECT * FROM products_product)
         context['products'] = Product.objects.all()
@@ -48,7 +48,7 @@ class ProductListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Listado Generic ListView'
-        context['header_title'] = 'Catálogo ListView'
+        context['header_title'] = 'Products Catalog ListView'
         return context
 
 
