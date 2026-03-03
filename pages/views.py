@@ -14,6 +14,7 @@ from django.views.generic import TemplateView
 from django.views import View
 from django.shortcuts import render, redirect
 from products.models import Product
+from .utils import ImageLocalStorage
 
 
 class HomePageView(TemplateView):
@@ -58,7 +59,7 @@ class AboutPageView(TemplateView):
 
 class CartView(View):
     template_name = 'cart/index.html'
-    
+
     def get(self, request):
         # Database products
         db_products = Product.objects.all()
@@ -98,3 +99,72 @@ class CartRemoveAllView(View):
             del request.session['cart_product_data']
 
         return redirect('pages:cart_index')
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# VERSIÓN CON DEPENDENCY INVERSION + DEPENDENCY INJECTION
+# ══════════════════════════════════════════════════════════════════════════════
+
+def ImageViewFactory(image_storage):
+    """
+    View Factory — Patrón DIP + DI
+    ─────────────────────────────────────────────────────────────────
+    DÓNDE ESTÁ LA INVERSIÓN (DIP):
+      - La función recibe un objeto que IMPLEMENTA la interfaz
+        ImageStorage (abstracción), sin importar si es local, S3, GCS.
+      - ImageView (alto nivel) depende de la ABSTRACCIÓN, no de
+        ImageLocalStorage (bajo nivel). La dependencia está invertida.
+
+    DÓNDE ESTÁ LA INYECCIÓN (DI):
+      - En pages/urls.py se llama:
+            ImageViewFactory(ImageLocalStorage())
+        El objeto concreto se INYECTA desde afuera (desde el router),
+        no se construye dentro de la view.
+    ─────────────────────────────────────────────────────────────────
+    """
+    class ImageView(View):
+        template_name = 'images/index.html'
+
+        def get(self, request):
+            # Recupera la URL de la imagen guardada en sesión
+            image_url = request.session.get('image_url', '')
+            return render(request, self.template_name, {'image_url': image_url})
+
+        def post(self, request):
+            # Delega el almacenamiento al objeto inyectado (image_storage)
+            # La View no sabe ni le importa si es local, S3 o GCS.
+            image_url = image_storage.store(request)
+            request.session['image_url'] = image_url
+            return redirect('image_index')
+
+    return ImageView
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# VERSIÓN SIN DEPENDENCY INVERSION (acoplada)
+# ══════════════════════════════════════════════════════════════════════════════
+
+class ImageViewNoDI(View):
+    """
+    View SIN Dependency Inversion — Versión acoplada
+    ─────────────────────────────────────────────────────────────────
+    PROBLEMA:
+      - La view instancia ImageLocalStorage() directamente en post().
+      - Si mañana se quiere usar S3, hay que MODIFICAR esta clase.
+      - Viola el principio de abierto/cerrado (OCP) y DIP.
+      - Es difícil de testear (no se puede inyectar un mock).
+    ─────────────────────────────────────────────────────────────────
+    """
+    template_name = 'imagesnotdi/index.html'
+
+    def get(self, request):
+        image_url = request.session.get('image_url', '')
+        return render(request, self.template_name, {'image_url': image_url})
+
+    def post(self, request):
+        # ACOPLAMIENTO: la view decide y construye su propia dependencia.
+        # Para cambiar de backend hay que editar ESTA clase.
+        image_storage = ImageLocalStorage()
+        image_url = image_storage.store(request)
+        request.session['image_url'] = image_url
+        return redirect('imagenotdi_index')

@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -126,3 +127,16 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# ── Media files (user-uploaded content) ───────────────────────────────────────
+# MEDIA_URL: URL pública para acceder a los archivos subidos
+MEDIA_URL = '/media/'
+# MEDIA_ROOT: carpeta física donde se guardan los archivos
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# ── Service Provider: DIP / DI ─────────────────────────────────────────────────
+# Cambia este string para usar otro backend sin tocar ninguna View.
+# Ejemplo S3: 'pages.utils.ImageS3Storage'
+IMAGE_STORAGE_CLASS = 'pages.utils.ImageLocalStorage'
